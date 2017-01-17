@@ -9,15 +9,13 @@
   <div class="row-fluid">
     <div class="span6 offset3">
       <div class="centered">
-        <h2>{{hello}}</h2>
-        <h2 class="cpu-display alert alert-info">Running: {{vmName}} - {{version}} ({{build}}) by {{vendor}}</h2>
+    
+        <h2 class="cpu-display alert alert-info">Running: {{vmName}} - {{version}} ({{build}}) by {{vendor}} in {{os}} {{osVersion}} ({{architecture}})</h2>
+        <div simple-form name="systemPropertyViewer" entity='systemProperties' data='systemPropertiesTable'
+				ng-model="systemProperties"></div>
+        
       </div>
     </div>
   </div>
-  <div class="row-fluid">
-    <div class="span6 offset3">
-      <p class="centered">
-      This is an example of a very simple hawtio plugin that's discovered via JMX using jolokia.</p>
-    </div>
-  </div>
+  
 </div>
