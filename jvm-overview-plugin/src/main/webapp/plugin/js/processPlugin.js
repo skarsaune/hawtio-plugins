@@ -49,18 +49,18 @@ var Process = (function(Process) {
 	 * and layoutFull used by the run function
 	 */
 	Process.module = angular.module('process_plugin', [ 'hawtioCore' ]).config(
-			function($routeProvider) {
+		function($routeProvider) {
 
-				/**
-				 * Here we define the route for our plugin. One note is to avoid
-				 * using 'otherwise', as hawtio has a handler in place when a
-				 * route doesn't match any routes that routeProvider has been
-				 * configured with.
-				 */
-				$routeProvider.when('/process_plugin', {
-					templateUrl : Process.templatePath + 'process.html'
-				});
+			/**
+			 * Here we define the route for our plugin. One note is to avoid
+			 * using 'otherwise', as hawtio has a handler in place when a
+			 * route doesn't match any routes that routeProvider has been
+			 * configured with.
+			 */
+			$routeProvider.when('/process_plugin', {
+				templateUrl : Process.templatePath + 'process.html'
 			});
+		});
 
 	/**
 	 * Here we define any initialization to be done when this angular module is
@@ -113,7 +113,6 @@ var Process = (function(Process) {
 			isActive : function(workspace) {
 				return workspace.isLinkActive("process_plugin");
 			}
-
 		});
 
 	});
@@ -129,6 +128,8 @@ var Process = (function(Process) {
 	 */
 	Process.ProcessController = function($scope, jolokia) {
 		$scope.hello = "Hello world!";
+
+		$scope.gridOptions=setupGridOptions();
 
 		// register a watch with jolokia on this mbean to
 		// get updated metrics
@@ -146,28 +147,70 @@ var Process = (function(Process) {
 			$scope.vendor = response.value['VmVendor'];
 			$scope.os = response.value.SystemProperties['os.name'];
 			$scope.osVersion = response.value.SystemProperties['os.version'];
-			$scope.architecture = response.value.SystemProperties['os.architecture'];
-			$scope.systemProperties = [];
-			
+			$scope.architecture = response.value.SystemProperties['os.arch'];
+			$scope.user = response.value.SystemProperties['user.name'];
+			var regex = /(\d+)@(.+)/g;
+			var pidAndHost = regex.exec(response.value.Name);
+			$scope.pid = pidAndHost[1];
+			$scope.host = pidAndHost[2];
+			$scope.startTime = response.value['StartTime'];
+			$scope.upTime = response.value['Uptime'];
+
 			//system property table
 			$scope.showFilterBar = true;
-			$scope.systemPropertiesTable = {properties: {}};
-			$scope.systemProperties = {};
+			$scope.systemPropertiesTable = {
+				properties : {}
+			};
+			$scope.systemProperties = [];
+
 			var systemProperties = response.value['SystemProperties'];
-			
-			for (property in systemProperties) { 
-				
+
+			for (property in systemProperties) {
+
 				if (systemProperties.hasOwnProperty(property)) {
-					var newPropertyName = property.replace(/\./g, '_');
+					$scope.systemProperties.push( {name: property, value: systemProperties[property]})
+/*					var newPropertyName = property.replace(/\./g, '_');
 					$scope.systemPropertiesTable.properties[newPropertyName] = {
-							label: property,
-							enabled: false
+						label : property,
+						enabled : false
 					};
-					$scope.systemProperties[newPropertyName] = systemProperties[property];
+					$scope.systemProperties[newPropertyName] = systemProperties[property]; */
 				}
-			}
+			} 
 
 			Core.$apply($scope);
+		}
+
+		function setupGridOptions() {
+			
+			return {
+				selectedItems : [],
+				data : 'systemProperties',
+				showFilter : true,
+				filterOptions : {
+					filterText : ''
+				},
+				showSelectionCheckbox : false,
+				enableRowClickSelection : false,
+				multiSelect : false,
+				primaryKeyFn : function(entity, idx) {
+					return entity.name;
+				},
+				columnDefs : [
+					{
+						field : 'name',
+						displayName : 'Property',
+						resizable : true
+					},
+					{
+						field : 'value',
+						displayName : 'Value',
+						resizable : true,
+						width : 150
+					}
+				]
+			};
+
 		}
 	};
 
