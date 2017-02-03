@@ -1,13 +1,13 @@
 package org.decentipede.hawtio.plugins;
 
-import io.hawt.jvm.local.JVMList;
-import io.hawt.web.plugin.HawtioPlugin;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import io.hawt.web.plugin.HawtioPlugin;
 
 public class PluginContextListener implements ServletContextListener {
 
@@ -30,8 +30,6 @@ public class PluginContextListener implements ServletContextListener {
 
     LOG.info("Initialized {} plugin", plugin.getName());
     
-    new JVMList().init();
-
   }
 
   @Override

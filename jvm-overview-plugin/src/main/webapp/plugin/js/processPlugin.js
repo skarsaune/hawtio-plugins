@@ -127,6 +127,7 @@ var Process = (function(Process) {
 	 * 
 	 */
 	Process.ProcessController = function($scope, jolokia) {
+		var supportsClassStats = false;
 		$scope.hello = "Hello world!";
 
 		$scope.gridOptions=setupGridOptions();
@@ -138,6 +139,52 @@ var Process = (function(Process) {
 			mbean : 'java.lang:type=Runtime',
 			arguments : []
 		}, onSuccess(render));
+		
+		function getClassMethod() {
+			if(supportsClassStats) {
+				return 'gcClassStats([Ljava.lang.String;)';
+			} else {
+				return 'gcClassHistogram([Ljava.lang.String;)';
+			}
+		}
+		
+		$scope.loadClassStats = function() {
+			var opName=getClassMethod();
+			Process.log.info(Date.now() + " invoking operation " + opName
+					+ " on decentipede");
+			jolokia.request([ {
+				type : "exec",
+				operation : opName,
+				mbean : 'com.sun.management:type=DiagnosticCommand',
+				arguments : ['']
+			} ], onSuccess(function(response) {
+				$scope.classHistogram = response.value;
+				Core.$apply($scope);
+				Process.log.info(Date.now() + " Operation " + opName
+						+ " was successful");
+			}));
+		};
+				
+		function reconstructCommandLine(runtime) {
+			var commandLine='';
+			var javaHome = runtime.SystemProperties['java.home'];
+			if(javaHome) {
+				var fileSeparator = runtime.SystemProperties['file.separator'];
+				commandLine += javaHome + fileSeparator + 'bin' + fileSeparator;
+			} 
+			commandLine += 'java ';
+			
+			for(vmArg in  runtime.InputArguments){
+				commandLine += escapeSpaces(runtime.InputArguments[vmArg]) + ' ';
+			}
+			commandLine += '-classpath ' + runtime.SystemProperties['java.class.path'] + ' ';
+			commandLine += runtime.SystemProperties['sun.java.command'];
+			return commandLine;
+		}
+		
+		function escapeSpaces(string) {
+			return string.replace(/ /g, '\\ ');
+		}
 
 		// update display of metric
 		function render(response) {
@@ -155,7 +202,9 @@ var Process = (function(Process) {
 			$scope.host = pidAndHost[2];
 			$scope.startTime = response.value['StartTime'];
 			$scope.upTime = response.value['Uptime'];
-
+			$scope.commandLine = reconstructCommandLine(response.value);
+			$scope.workingDirectory = response.value.SystemProperties['user.dir'];
+			
 			//system property table
 			$scope.showFilterBar = true;
 			$scope.systemPropertiesTable = {
@@ -169,14 +218,10 @@ var Process = (function(Process) {
 
 				if (systemProperties.hasOwnProperty(property)) {
 					$scope.systemProperties.push( {name: property, value: systemProperties[property]})
-/*					var newPropertyName = property.replace(/\./g, '_');
-					$scope.systemPropertiesTable.properties[newPropertyName] = {
-						label : property,
-						enabled : false
-					};
-					$scope.systemProperties[newPropertyName] = systemProperties[property]; */
 				}
 			} 
+			
+			supportsClassStats = $scope.commandLine.indexOf('-XX:+SupportJVM');
 
 			Core.$apply($scope);
 		}
@@ -191,7 +236,7 @@ var Process = (function(Process) {
 					filterText : ''
 				},
 				showSelectionCheckbox : false,
-				enableRowClickSelection : false,
+				enableRowClickSelection : true,
 				multiSelect : false,
 				primaryKeyFn : function(entity, idx) {
 					return entity.name;
