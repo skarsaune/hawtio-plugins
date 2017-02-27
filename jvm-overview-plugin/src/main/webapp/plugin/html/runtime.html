@@ -1,17 +1,18 @@
-<div class="process-controller"
-	ng-controller="Process.ProcessController">
+<div class="runtime-controller"
+	ng-controller="Runtime.RuntimeController">
 
 	<div class="row-fluid">
 		<div class="span10">
 			<div >
-				<div class="label">Summary</div>
+				<h2>Summary</h2>
 				<div class="cpu-display value">Running: (pid:
 					<b>{{pid}}</b>) {{vmName}} - {{version}} ({{build}}) by {{vendor}} in
 					{{os}} {{osVersion}} ({{architecture}}) on <b>{{user}}@{{host}}</b> running since <b>{{startTime | date: 'yyyy-MM-dd hh:mm:ss' }}</b></div>
-				<div class="label">Command line (simulated)</div>
+				<h2>Command line (simulated)</h2>
 				<div class="value">{{commandLine}}</div>
-				<div class="label">Working directory</div>
+				<h2>Working directory</h2>
 				<div class="value">{{workingDirectory}}</div>
+				<h2>System properties</h2>
 			<div class="control-group inline-block pull-right">
               <input type="text" class="search-query ng-pristine ng-valid" placeholder="Filter..." ng-model="gridOptions.filterOptions.filterText">
               <i class="icon-remove clickable" title="Clear filter" ng-click="gridOptions.filterOptions.filterText = ''"></i>
@@ -21,9 +22,9 @@
 
 			</div>
 			<button class="btn" 
-						ng-click="loadClassStats()">
+						ng-click="loadClassStats()" ng-show="supportsMemoryOperations">
 						<i class="icon-repeat"></i>Reload</button>
-			<div><pre>{{classHistogram}}</pre>
+			<div ng-show="supportsMemoryOperations"><pre>{{classHistogram}}</pre>
 			</div>
 		</div>
 	</div>

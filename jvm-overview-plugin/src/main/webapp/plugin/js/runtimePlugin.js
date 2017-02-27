@@ -1,11 +1,10 @@
 /**
- * @module Process
- * @mail Process
+ * @module Runtime
  * 
- * The main entry point for the Process module
+ * The main entry point for the Runtime module
  * 
  */
-var Process = (function(Process) {
+var Runtime = (function(Runtime) {
 
 	/**
 	 * @property pluginName
@@ -13,7 +12,7 @@ var Process = (function(Process) {
 	 * 
 	 * The name of this plugin
 	 */
-	Process.pluginName = 'process_plugin';
+	Runtime.pluginName = 'runtime_plugin';
 
 	/**
 	 * @property log
@@ -21,7 +20,7 @@ var Process = (function(Process) {
 	 * 
 	 * This plugin's logger instance
 	 */
-	Process.log = Logger.get('Process');
+	Runtime.log = Logger.get('Runtime');
 
 	/**
 	 * @property contextPath
@@ -30,7 +29,7 @@ var Process = (function(Process) {
 	 * The top level path of this plugin on the server
 	 * 
 	 */
-	Process.contextPath = "${contextPath}";
+	Runtime.contextPath = "${contextPath}";
 
 	/**
 	 * @property templatePath
@@ -38,7 +37,7 @@ var Process = (function(Process) {
 	 * 
 	 * The path to this plugin's partials
 	 */
-	Process.templatePath = Process.contextPath + "plugin/html/";
+	Runtime.templatePath = Runtime.contextPath + "plugin/html/";
 
 	/**
 	 * @property module
@@ -48,7 +47,7 @@ var Process = (function(Process) {
 	 * hawtioCore to run, which provides services like workspace, viewRegistry
 	 * and layoutFull used by the run function
 	 */
-	Process.module = angular.module('process_plugin', [ 'hawtioCore' ]).config(
+	Runtime.module = angular.module('runtime_plugin', [ 'hawtioCore' ]).config(
 		function($routeProvider) {
 
 			/**
@@ -57,8 +56,8 @@ var Process = (function(Process) {
 			 * route doesn't match any routes that routeProvider has been
 			 * configured with.
 			 */
-			$routeProvider.when('/process_plugin', {
-				templateUrl : Process.templatePath + 'process.html'
+			$routeProvider.when('/runtime_plugin', {
+				templateUrl : Runtime.templatePath + 'runtime.html'
 			});
 		});
 
@@ -73,15 +72,15 @@ var Process = (function(Process) {
 	 * our plugin. This is just a matter of adding to the workspace's
 	 * topLevelTabs array.
 	 */
-	Process.module.run(function(workspace, viewRegistry, layoutFull) {
+	Runtime.module.run(function(workspace, viewRegistry, layoutFull) {
 
-		Process.log.info(Process.pluginName, " loaded");
+		Runtime.log.info(Runtime.pluginName, " loaded");
 
-		Core.addCSS(Process.contextPath + "plugin/css/process.css");
+		Core.addCSS(Runtime.contextPath + "plugin/css/runtime.css");
 
 		// tell the app to use the full layout, also could use layoutTree
 		// to get the JMX tree or provide a URL to a custom layout
-		viewRegistry["process_plugin"] = layoutFull;
+		viewRegistry["runtime_plugin"] = layoutFull;
 
 		/*
 		 * Set up top-level link to our plugin. Requires an object with the
@@ -101,32 +100,33 @@ var Process = (function(Process) {
 		 * from workspace that checks if $location.url() starts with our route.
 		 */
 		workspace.topLevelTabs.push({
-			id : "process",
-			content : "Process",
-			title : "Java Process Information",
+			id : "runtime",
+			content : "Runtime",
+			title : "Java Runtime Process Information",
 			isValid : function(workspace) {
 				return true;
 			},
 			href : function() {
-				return "#/process_plugin";
+				return "#/runtime_plugin";
 			},
 			isActive : function(workspace) {
-				return workspace.isLinkActive("process_plugin");
+				return workspace.isLinkActive("runtime_plugin");
 			}
 		});
 
 	});
 
 	/**
-	 * @function SimpleController
+	 * @function RuntimeController
 	 * @param $scope
 	 * @param jolokia
 	 * 
-	 * The controller for process.html, only requires the jolokia service from
+	 * The controller for runtime.html, only requires the jolokia service from
 	 * hawtioCore
 	 * 
 	 */
-	Process.ProcessController = function($scope, jolokia) {
+	Runtime.RuntimeController = function($scope, jolokia, workspace) {
+		$scope.supportsMemoryOperations = workspace.treeContainsDomainAndProperties('com.sun.management', {type: 'DiagnosticCommand'});
 		var supportsClassStats = false;
 		$scope.hello = "Hello world!";
 
@@ -150,7 +150,7 @@ var Process = (function(Process) {
 		
 		$scope.loadClassStats = function() {
 			var opName=getClassMethod();
-			Process.log.info(Date.now() + " invoking operation " + opName
+			Runtime.log.info(Date.now() + " invoking operation " + opName
 					+ " on decentipede");
 			jolokia.request([ {
 				type : "exec",
@@ -160,7 +160,7 @@ var Process = (function(Process) {
 			} ], onSuccess(function(response) {
 				$scope.classHistogram = response.value;
 				Core.$apply($scope);
-				Process.log.info(Date.now() + " Operation " + opName
+				Runtime.log.info(Date.now() + " Operation " + opName
 						+ " was successful");
 			}));
 		};
@@ -259,10 +259,10 @@ var Process = (function(Process) {
 		}
 	};
 
-	return Process;
+	return Runtime;
 
-})(Process || {});
+})(Runtime || {});
 
 // tell the hawtio plugin loader about our plugin so it can be
 // bootstrapped with the rest of angular
-hawtioPluginLoader.addModule(Process.pluginName);
+hawtioPluginLoader.addModule(Runtime.pluginName);

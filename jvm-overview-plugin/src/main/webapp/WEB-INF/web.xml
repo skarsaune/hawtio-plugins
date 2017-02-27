@@ -1,28 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee
-	      http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
-	version="2.4">
-
-	<description>A plugin that provides basic information about a JVM</description>
-	<display-name>java-overview-plugin</display-name>
-
-
-	<!-- listener that will register this plugin with Hawtio -->
-	<listener>
-		<listener-class>org.decentipede.hawtio.plugins.PluginContextListener</listener-class>
-	</listener>
-
-	<servlet>
-		<servlet-name>ContextAwareScriptServlet</servlet-name>
-		<servlet-class>org.decentipede.hawtio.plugins.ContextAwareScriptServlet</servlet-class>
-	</servlet>
-
-	<servlet-mapping>
-		<servlet-name>ContextAwareScriptServlet</servlet-name>
-		<url-pattern>*.js</url-pattern>
-	</servlet-mapping>
-
-
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:web="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd http://xmlns.jcp.org/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.4">
+  <description>A plugin that provides basic information about a JVM</description>
+  <display-name>java-runtime-plugin</display-name>
+  <listener>
+    <listener-class>org.decentipede.hawtio.plugins.PluginContextListener</listener-class>
+  </listener>
+  <servlet>
+    <servlet-name>ContextAwareScriptServlet</servlet-name>
+    <servlet-class>org.decentipede.hawtio.plugins.ContextAwareScriptServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ContextAwareScriptServlet</servlet-name>
+    <url-pattern>*.js</url-pattern>
+  </servlet-mapping>
 </web-app>
-
