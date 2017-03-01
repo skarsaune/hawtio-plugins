@@ -1,0 +1,26 @@
+<div class="jcmd-controller"
+	ng-controller="DiagnosticCommand.DiagnosticCommandController">
+
+	<div class="row-fluid">
+		<div class="span10">
+
+			<h1>Java Flight Recorder</h1>
+			<b>Note: running jfr on production systems requires a commercial license!</b>
+			<div>
+			<button ng-show="!jfrEnabled" tooltip="jcmd {{pid}} VM.unlock_commercial_features" ng-click="unlock()">Unlock commercial features</button>
+			<button ng-show="jfrEnabled && !isRecording" ng-enabled="!isRecording" tooltip="jcmd {{pid}} JFR.start" ng-click="startRecording()">Start recording</button>
+			<button ng-show="jfrEnabled && isRecording" ng-enabled="isRecording" tooltip="jcmd {{pid}} JFR.dump recording={{recording}} filename=<filename>" ng-click="dumpRecording()">Dump recording to disk</button>
+			<button ng-show="jfrEnabled && isRecording" ng-enabled="isRecording" tooltip="jcmd {{pid}} JFR.stop recording={{recording}}" ng-click="stopRecording()">Stop recording</button >
+			</div>
+			<p>Status:</p>
+			<pre>{{jfrStatus}}</pre>
+			<h1>Inspect heap</h1>
+			<button class="btn" 
+						ng-click="loadClassStats()" >
+						<i class="icon-repeat"></i>Reload</button>
+			<div><pre>{{classHistogram}}</pre>
+			</div>
+		</div>
+	</div>
+
+</div>

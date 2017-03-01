@@ -139,31 +139,6 @@ var Runtime = (function(Runtime) {
 			mbean : 'java.lang:type=Runtime',
 			arguments : []
 		}, onSuccess(render));
-		
-		function getClassMethod() {
-			if(supportsClassStats) {
-				return 'gcClassStats([Ljava.lang.String;)';
-			} else {
-				return 'gcClassHistogram([Ljava.lang.String;)';
-			}
-		}
-		
-		$scope.loadClassStats = function() {
-			var opName=getClassMethod();
-			Runtime.log.info(Date.now() + " invoking operation " + opName
-					+ " on decentipede");
-			jolokia.request([ {
-				type : "exec",
-				operation : opName,
-				mbean : 'com.sun.management:type=DiagnosticCommand',
-				arguments : ['']
-			} ], onSuccess(function(response) {
-				$scope.classHistogram = response.value;
-				Core.$apply($scope);
-				Runtime.log.info(Date.now() + " Operation " + opName
-						+ " was successful");
-			}));
-		};
 				
 		function reconstructCommandLine(runtime) {
 			var commandLine='';
@@ -221,7 +196,6 @@ var Runtime = (function(Runtime) {
 				}
 			} 
 			
-			supportsClassStats = $scope.commandLine.indexOf('-XX:+SupportJVM');
 
 			Core.$apply($scope);
 		}

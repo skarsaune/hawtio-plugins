@@ -34,7 +34,6 @@
       <groupId>io.hawt</groupId>
       <artifactId>hawtio-local-jvm-mbean</artifactId>
       <version>1.5-SNAPSHOT</version>
-      <scope>provided</scope>
     </dependency>
 
     <!-- logging -->
