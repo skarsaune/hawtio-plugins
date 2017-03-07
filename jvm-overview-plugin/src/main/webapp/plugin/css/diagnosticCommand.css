@@ -1,2 +1,45 @@
+.casette {
+	background: #000000;
+	width: 400px;
+	height: 250px;
+	border-radius: 20px;
+}
 
+.cassetteLabelCutCorners {
+	top: 25px;
+	left: 25px;
+	width: 300px;
+	height: 0;
+	border-bottom: 25px solid white;
+	border-left: 25px solid transparent;
+	border-right: 25px solid transparent;
+	position: relative;
+	
+}
+.casetteLabel {
+	background: #ffffff;
+	top: 25px;
+	left: 25px;
+	width: 325px;
+	height: 125px;
+	position: relative;
+	padding-left: 25px;
+	font-family: fantasy; 
+}
+
+.notLabel {
+	background: #000000;
+	border-radius: 30px;
+	width: 200px;
+	height: 50px;
+	left: 75px;
+	top: 50px;
+	position: absolute;
+}
+
+.spinnableDisabled {
+	animation-name: spin;
+    animation-duration: 1000ms;
+    animation-iteration-count: infinite;
+}
 

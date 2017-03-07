@@ -5,20 +5,57 @@
 		<div class="span10">
 
 			<h1>Java Flight Recorder</h1>
-			<b>Note: running jfr on production systems requires a commercial license!</b>
-			<div>
-			<button ng-show="!jfrEnabled" tooltip="jcmd {{pid}} VM.unlock_commercial_features" ng-click="unlock()">Unlock commercial features</button>
-			<button ng-show="jfrEnabled && !isRecording" ng-enabled="!isRecording" tooltip="jcmd {{pid}} JFR.start" ng-click="startRecording()">Start recording</button>
-			<button ng-show="jfrEnabled && isRecording" ng-enabled="isRecording" tooltip="jcmd {{pid}} JFR.dump recording={{recording}} filename=<filename>" ng-click="dumpRecording()">Dump recording to disk</button>
-			<button ng-show="jfrEnabled && isRecording" ng-enabled="isRecording" tooltip="jcmd {{pid}} JFR.stop recording={{recording}}" ng-click="stopRecording()">Stop recording</button >
+			<b>Note: running jfr on production systems requires a commercial
+				license!</b>
+			<div class="casette">
+				<div class="cassetteLabelCutCorners"></div>
+				<div class="casetteLabel">
+					{{jfrStatus}}
+					<div class="notLabel">
+						<svg role="img" aria-label="hjelp"
+							xmlns="http://www.w3.org/2000/svg" version="1.1"
+							viewBox="0 0 100 100">
+				<circle cx="12" cy="12" r="11" fill="white" />
+				<circle cx="12" cy="12" r="8" fill="black" />
+				<rect class="spinnable" x="2" y="10" width="20" height="4" fill="black" stroke="none"/>
+				<rect class="spinnable" x="2" y="10" width="20" height="4" fill="black" stroke="none" transform="rotate(45,12,12)"/>
+				<rect class="spinnable" x="2" y="10" width="20" height="4" fill="black" stroke="none" transform="rotate(90,12,12)"/>
+				<rect class="spinnable" x="2" y="10" width="20" height="4" fill="black" stroke="none" transform="rotate(135,12,12)"/>
+				<circle cx="88" cy="12" r="11" fill="white" />
+				<circle cx="88" cy="12" r="8" fill="black" />
+				<rect class="spinnable" x="78" y="10" width="20" height="4" fill="black" stroke="none"/>
+				<rect class="spinnable" x="78" y="10" width="20" height="4" fill="black" stroke="none" transform="rotate(45,88,12)"/>
+				<rect class="spinnable" x="78" y="10" width="20" height="4" fill="black" stroke="none" transform="rotate(90,88,12)"/>
+				<rect class="spinnable" x="78" y="10" width="20" height="4" fill="black" stroke="none" transform="rotate(135,88,12)"/>
+				</svg>
+					</div>
+				</div>
+			</div>
+			<div class="btn-group">
+
+				<button ng-show="!jfrEnabled"
+					tooltip="jcmd {{pid}} VM.unlock_commercial_features"
+					ng-click="unlock()">Unlock commercial features</button>
+				<button class="btn" ng-show="jfrEnabled && !isRecording"
+					ng-enabled="!isRecording" tooltip="jcmd {{pid}} JFR.start"
+					ng-click="startRecording()">Start recording</button>
+				<button class="btn" ng-show="jfrEnabled && isRecording"
+					ng-enabled="isRecording"
+					tooltip="jcmd {{pid}} JFR.dump recording={{recording}} filename=<filename>"
+					ng-click="dumpRecording()">Dump recording to disk</button>
+				<button class="btn" ng-show="jfrEnabled && isRecording"
+					ng-enabled="isRecording"
+					tooltip="jcmd {{pid}} JFR.stop recording={{recording}}"
+					ng-click="stopRecording()">Stop recording</button>
 			</div>
 			<p>Status:</p>
 			<pre>{{jfrStatus}}</pre>
 			<h1>Inspect heap</h1>
-			<button class="btn" 
-						ng-click="loadClassStats()" >
-						<i class="icon-repeat"></i>Reload</button>
-			<div><pre>{{classHistogram}}</pre>
+			<button class="btn" ng-click="loadClassStats()">
+				<i class="icon-repeat"></i>Reload
+			</button>
+			<div>
+				<pre>{{classHistogram}}</pre>
 			</div>
 		</div>
 	</div>
