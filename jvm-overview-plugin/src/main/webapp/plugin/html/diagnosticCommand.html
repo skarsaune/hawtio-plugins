@@ -8,6 +8,14 @@
 			<p><b>Note: running jfr on production systems requires a commercial
 				license!</b></p>
 			<div class="casette">
+			<svg role="img" aria-label="recording indicator"
+							xmlns="http://www.w3.org/2000/svg" version="1.1"
+							viewBox="0 0 24 24" width="25" height="25" id="recordingIndicator">
+							<circle cx="12" cy="12" r="11" fill="red" ng-show="isRecording">
+								<animate attributeType="XML" attributeName="fill" from="#ff0000" to="#000000"
+        dur="2s" repeatCount="indefinite"/>
+							</circle>
+				</svg>
 				<div class="cassetteLabelCutCorners"></div>
 				<div class="casetteLabel">
 					{{jfrStatus}}
