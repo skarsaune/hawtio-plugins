@@ -27,6 +27,11 @@
 	font-family: fantasy; 
 }
 
+.cogSpacer {
+	width: 100px;
+	height: 50px;
+}
+
 .notLabel {
 	background: #000000;
 	border-radius: 30px;
@@ -37,9 +42,22 @@
 	position: absolute;
 }
 
-.spinnableDisabled {
+.spinning {
 	animation-name: spin;
-    animation-duration: 1000ms;
+	animation-duration: 3000ms;
     animation-iteration-count: infinite;
+    animation-timing-function: linear;
 }
+
+.wrapCog {
+	width: 50px;
+	height: 50px;
+}
+
+#rightCogWrapper {
+	position: absolute;
+	top: 0;
+	right: 0;
+}
+
 

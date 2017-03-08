@@ -5,29 +5,41 @@
 		<div class="span10">
 
 			<h1>Java Flight Recorder</h1>
-			<b>Note: running jfr on production systems requires a commercial
-				license!</b>
+			<p><b>Note: running jfr on production systems requires a commercial
+				license!</b></p>
 			<div class="casette">
 				<div class="cassetteLabelCutCorners"></div>
 				<div class="casetteLabel">
 					{{jfrStatus}}
 					<div class="notLabel">
-						<svg role="img" aria-label="hjelp"
+					<div class="wrapCog" ng-class="{'spinning': isRecording}">
+						<svg role="img" aria-label="cassette wheel"
 							xmlns="http://www.w3.org/2000/svg" version="1.1"
-							viewBox="0 0 100 100">
+							viewBox="0 0 24 24" width="50" height="50" ng-class="{'spinning': isRecording}" id="leftcog">
 				<circle cx="12" cy="12" r="11" fill="white" />
 				<circle cx="12" cy="12" r="8" fill="black" />
-				<rect class="spinnable" x="2" y="10" width="20" height="4" fill="black" stroke="none"/>
-				<rect class="spinnable" x="2" y="10" width="20" height="4" fill="black" stroke="none" transform="rotate(45,12,12)"/>
-				<rect class="spinnable" x="2" y="10" width="20" height="4" fill="black" stroke="none" transform="rotate(90,12,12)"/>
-				<rect class="spinnable" x="2" y="10" width="20" height="4" fill="black" stroke="none" transform="rotate(135,12,12)"/>
-				<circle cx="88" cy="12" r="11" fill="white" />
-				<circle cx="88" cy="12" r="8" fill="black" />
-				<rect class="spinnable" x="78" y="10" width="20" height="4" fill="black" stroke="none"/>
-				<rect class="spinnable" x="78" y="10" width="20" height="4" fill="black" stroke="none" transform="rotate(45,88,12)"/>
-				<rect class="spinnable" x="78" y="10" width="20" height="4" fill="black" stroke="none" transform="rotate(90,88,12)"/>
-				<rect class="spinnable" x="78" y="10" width="20" height="4" fill="black" stroke="none" transform="rotate(135,88,12)"/>
+				<rect  x="2" y="10" width="20" height="4"
+								fill="black" stroke="none" />
+				<rect  x="2" y="10" width="20" height="4"
+								fill="black" stroke="none" transform="rotate(45,12,12)" />
+				<rect  x="2" y="10" width="20" height="4"
+								fill="black" stroke="none" transform="rotate(90,12,12)" />
+				<rect  x="2" y="10" width="20" height="4"
+								fill="black" stroke="none" transform="rotate(135,12,12)" />
 				</svg>
+				</div>
+				<div class="wrapCog" ng-class="{'spinning': isRecording}" id="rightCogWrapper">
+				<svg role="img" aria-label="cassette wheel"
+							xmlns="http://www.w3.org/2000/svg" version="1.1"
+							viewBox="0 0 24 24" width="50" height="50" ng-class="{'spinning': isRecording}">
+					<circle cx="12" cy="12" r="11" fill="white" />
+					<circle cx="12" cy="12" r="8" fill="black" />
+					<rect  x="2" y="10" width="20" height="4" fill="black" stroke="none" />
+					<rect  x="2" y="10" width="20" height="4" fill="black" stroke="none" transform="rotate(45,12,12)" />
+					<rect  x="2" y="10" width="20" height="4" fill="black" stroke="none" transform="rotate(90,12,12)" />
+					<rect  x="2" y="10" width="20" height="4" fill="black" stroke="none" transform="rotate(135,12,12)" />
+				</svg>
+				</div>
 					</div>
 				</div>
 			</div>
@@ -48,8 +60,6 @@
 					tooltip="jcmd {{pid}} JFR.stop recording={{recording}}"
 					ng-click="stopRecording()">Stop recording</button>
 			</div>
-			<p>Status:</p>
-			<pre>{{jfrStatus}}</pre>
 			<h1>Inspect heap</h1>
 			<button class="btn" ng-click="loadClassStats()">
 				<i class="icon-repeat"></i>Reload

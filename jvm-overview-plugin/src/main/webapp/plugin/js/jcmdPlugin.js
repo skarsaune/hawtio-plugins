@@ -206,7 +206,7 @@ var DiagnosticCommand = (function(DiagnosticCommand) {
 			} ], onSuccess(function(response) {
 				DiagnosticCommand.log.info(Date.now() + " Operation " + operation
 						+ " was successful" + response.value);
-				alert(response.value);
+				Core.$apply($scope);
 			}));
 		}
 		
