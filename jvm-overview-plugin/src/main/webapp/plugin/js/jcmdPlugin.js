@@ -1,3 +1,8 @@
+//Util functions
+function splitResponse(response) {
+	return response.match(/Dumped recording (\d+),(.+) written to:\n\n(.+)/);
+}
+
 /**
  * @module DiagnosticCommand
  * 
@@ -130,7 +135,10 @@ var DiagnosticCommand = (function(DiagnosticCommand) {
 	DiagnosticCommand.DiagnosticCommandController = function($scope, jolokia, workspace) {
 		var supportsClassStats = false;
 		$scope.jfrStatus = '';
+		$scope.jfrEnabled=false;
+		$scope.isRecording=false;
 		$scope.response = {};
+		$scope.recordings=[];		
 
 		// register a watch with jolokia on this mbean to
 		// get updated metrics
@@ -177,13 +185,17 @@ var DiagnosticCommand = (function(DiagnosticCommand) {
 
 			if(response.request.type === 'exec' && response.request.operation.indexOf("jfrCheck") > -1) {
 				var statusString=response.value;
-				$scope.jfrStatus=statusString;
 				$scope.jfrEnabled=statusString.indexOf("not enabled") == -1;
 				$scope.isRecording=statusString.indexOf("(running)") > -1;
+				if((statusString.indexOf("Use JFR.") > -1 || statusString.indexOf("Use VM.") > -1) && $scope.pid) {
+					statusString=statusString.replace("Use ", "Use command line: jcmd " + $scope.pid  + " ");
+				}
+				$scope.jfrStatus=statusString;
 				if($scope.isRecording) {
 					var regex = /recording=(\d)/g;
 					$scope.recording=regex.exec(statusString)[1];
 				}
+				
 			} else {
 				var regex = /(\d+)@(.+)/g;
 				var pidAndHost = regex.exec(response.value.Name);
@@ -195,7 +207,7 @@ var DiagnosticCommand = (function(DiagnosticCommand) {
 			Core.$apply($scope);
 		}
 		
-		function executeDiagnosticFunction(operation, arguments) {
+		function executeDiagnosticFunction(operation, arguments, callback) {
 			DiagnosticCommand.log.info(Date.now() + " Invoking operation " + operation
 					+ " with arguments" + arguments);
 			jolokia.request([{
@@ -204,8 +216,11 @@ var DiagnosticCommand = (function(DiagnosticCommand) {
 				mbean : 'com.sun.management:type=DiagnosticCommand',
 				arguments : arguments
 			} ], onSuccess(function(response) {
-				DiagnosticCommand.log.info(Date.now() + " Operation " + operation
+				DiagnosticCommand.log.debug(Date.now() + " Operation " + operation
 						+ " was successful" + response.value);
+				if(callback) {
+					callback(response.value);
+				}
 				Core.$apply($scope);
 			}));
 		}
@@ -219,9 +234,23 @@ var DiagnosticCommand = (function(DiagnosticCommand) {
 		};
 		
 		$scope.dumpRecording=function() {
-			var filename=window.prompt("Enter filename", "*.jfr");
+			var filename=window.prompt("Enter filename", "recording" + $scope.recording + ".jfr");
 			if(filename) {
-				executeDiagnosticFunction('jfrDump([Ljava.lang.String;)', ["recording=" + $scope.recording + ",filename=" + filename]);
+				executeDiagnosticFunction('jfrDump([Ljava.lang.String;)', 
+						["recording=" + $scope.recording + ",filename=" + filename],
+						function(response) {
+					
+					
+					matches = splitResponse(response);
+					DiagnosticCommand.log.debug("response: " + response + " split: " + matches + "split2: " + splitResponse(response));
+					if(matches) {
+						var recordingData = {number: matches[1], size: matches[2], file: matches[3], time: Date.now()};
+						DiagnosticCommand.log.debug("data: " + recordingData);
+						$scope.recordings.push(recordingData);
+					}
+					
+				});
+				
 			}	
 		}
 		

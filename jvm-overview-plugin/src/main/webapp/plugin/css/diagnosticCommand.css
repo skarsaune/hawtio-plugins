@@ -3,6 +3,7 @@
 	width: 400px;
 	height: 250px;
 	border-radius: 20px;
+	margin: 15px;
 }
 
 .cassetteLabelCutCorners {
@@ -63,10 +64,25 @@
 #recordingIndicator {
 	margin-top: 5px;
 	margin-left: 5px;
-	animation-name: flash;
-	animation-duration: 3000ms;
-    animation-iteration-count: infinite;
-    animation-timing-function: linear;
+}
+
+.recorderButton {
+	padding: 10px;
+}
+
+.raisedButton {
+	box-shadow: 10px 10px;
+}
+
+.casettePlayer {
+	background: #555555;
+	border-radius: 10px;
+	width: 430px;
+	margin-bottom: 15px;
+}
+
+.casetteButtons {
+	margin: 15px;
 }
 
 
