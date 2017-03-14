@@ -82,7 +82,28 @@
 }
 
 .casetteButtons {
-	margin: 15px;
+	margin: 25px;
+}
+
+.recordingSymbol {
+	height: 50px;
+	width: 50px;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	margin-left: 3px;
+	margin-right: 3px;
+}
+
+#rec {
+	border-radius: 50%;
+	background-color: red;
+	
+}
+
+#stop {
+	border-radius: 1px;
+	background-color: black;
+	
 }
 
 

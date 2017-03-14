@@ -215,13 +215,24 @@ var DiagnosticCommand = (function(DiagnosticCommand) {
 				operation : operation,
 				mbean : 'com.sun.management:type=DiagnosticCommand',
 				arguments : arguments
-			} ], onSuccess(function(response) {
+			},
+			{
+				type : 'exec',
+				operation: 'jfrCheck([Ljava.lang.String;)',
+				mbean : 'com.sun.management:type=DiagnosticCommand',
+				arguments : ['']
+			}], onSuccess(function(response) {
+				
 				DiagnosticCommand.log.debug(Date.now() + " Operation " + operation
 						+ " was successful" + response.value);
-				if(callback) {
-					callback(response.value);
+				if(response.request.operation.indexOf("jfrCheck") > -1) {
+					render(response);
+				} else {
+					if(callback) {
+						callback(response.value);
+					}
+					Core.$apply($scope);
 				}
-				Core.$apply($scope);
 			}));
 		}
 		

@@ -69,7 +69,7 @@
 					</button>
 					<button class="recorderButton btn" ng-enabled="!isRecording" ng-class="!jfrEnabled || isRecording ? 'disabled' : 'raisedButton'"
 						tooltip="jcmd {{pid}} JFR.start" ng-click="startRecording()">
-						<i class="icon-play icon-5x"></i>
+						<div class="recordingSymbol" id="rec"></div>
 					</button>
 					<button class="recorderButton btn" title="Dump recording to disk" ng-class="jfrEnabled && isRecording ? 'raisedButton' : 'disabled'"
 						ng-enabled="isRecording"
@@ -80,11 +80,11 @@
 					<button class="recorderButton btn" ng-enabled="isRecording" ng-class="jfrEnabled && isRecording ? 'raisedButton' : 'disabled'"
 						tooltip="jcmd {{pid}} JFR.stop recording={{recording}}"
 						ng-click="stopRecording()">
-						<i class="icon-stop icon-5x"></i>
+						<div class="recordingSymbol" id="stop"></div>
 					</button>
 				</div>
 			</div>
-			<table ng-show="recordings.lenght > 0" class="table table-condensed table-striped">
+			<table ng-show="!!!recordings.lenght" class="table table-condensed table-striped">
 				<tr>
 					<th>Recording</th>
 					<th>Size</th>
